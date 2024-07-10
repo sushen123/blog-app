@@ -1,0 +1,23 @@
+{
+  "name": "server",
+  "scripts": {
+    "dev": "wrangler dev src/index.ts",
+    "deploy": "wrangler deploy --minify src/index.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.16.1",
+    "@prisma/extension-accelerate": "^1.1.0",
+    "@sushen1234/blog-common": "^1.0.3",
+    "form-data": "^4.0.0",
+    "formidable": "^3.5.1",
+    "hono": "^4.4.12",
+    "typescript": "^5.5.3",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240529.0",
+    "@types/formidable": "^3.4.5",
+    "prisma": "^5.16.1",
+    "wrangler": "^3.57.2"
+  }
+}
