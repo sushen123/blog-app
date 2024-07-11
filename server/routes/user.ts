@@ -7,6 +7,10 @@ import { signUpInput } from "@sushen1234/blog-common"
 import { signInInput } from "@sushen1234/blog-common"
 import { verify } from "hono/jwt"
 
+
+import { hashPassword } from "./hashedPassword"
+import { verifyPassword } from "./hashedPassword"
+
 const userRouter = new Hono<{
     Bindings: {
        DATABASE_URL: string,
@@ -16,6 +20,7 @@ const userRouter = new Hono<{
         userId: string 
     }
 }>()
+
 
 userRouter.use("/name", async (c, next) => {
     const authHeader = c.req.header("authorization") || ""
@@ -49,7 +54,7 @@ const prisma = new PrismaClient({
  
 
     try {
-
+       
         const userExist = await prisma.user.findFirst({
             where: {
               username: body.username
@@ -61,11 +66,12 @@ const prisma = new PrismaClient({
               message: "User already exists"
             }, 405)
           }
-          
+    
+          const hashedPassword =  await hashPassword(body.password)
    const user =  await prisma.user.create({
         data: {
             username: body.username,
-            password: body.password,
+            password: hashedPassword,
             name: body.name
         }
     })
@@ -101,18 +107,33 @@ catch(e){
             message: "Input incorrect"
         })
     }
+            
     try {
+
+        
         const user = await prisma.user.findUnique({
             where: {
                 username: body.username,
-                password: body.password
+                
             }
         })
+
+     
 
         if(!user) {
             c.status(403)
             return c.json({
-                message: "Incorrect Username of Password"
+                message: "Incorrect Username or Password"
+            })
+        }
+        const PasswordMatch = await verifyPassword(user?.password, body.password)
+        console.log(PasswordMatch)
+        
+        if(!PasswordMatch) {
+
+            c.status(403)
+            return c.json({
+                message: "Inccorect Username or Password"
             })
         }
 

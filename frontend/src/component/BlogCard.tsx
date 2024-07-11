@@ -1,6 +1,14 @@
 import { useNavigate } from "react-router-dom";
 
-export const BlogCard = ({title, content, date , id, name}) => {
+  export interface BlogCardProps {
+    title: string;
+    content: string;
+    date: string;
+    id: number;
+    name: string;
+  }
+
+export const BlogCard: React.FC<BlogCardProps> = ({title, content, date , id, name}) => {
     const navigate = useNavigate()
 
     const shortContent = content.length > 200 ? `${content.substring(0,200)}...` : content;
@@ -22,3 +30,5 @@ export const BlogCard = ({title, content, date , id, name}) => {
         </div>
     </button>
 }
+
+

@@ -13,7 +13,7 @@ export const SigninBox = () => {
         password: ""
     })
     const navigate = useNavigate()
-    const [err, setErr] = useState("")
+    const [err, setErr] = useState<string | null>(null);
     const [load, setLoad] = useState(false)
 
     return <div className="h-screen flex justify-center items-center ">
@@ -46,8 +46,11 @@ export const SigninBox = () => {
                 setLoad(false)
             }
             catch(err) {
-               
-                setErr(err.response.data.message)
+                if (axios.isAxiosError(err)) {
+                    setErr(err.response?.data.message || "An error occurred");
+                } else {
+                    setErr("An error occurred");
+                }
                 
             }
         }} />

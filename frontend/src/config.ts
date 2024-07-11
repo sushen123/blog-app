@@ -1,2 +1,2 @@
 
-export const BACKEND_URL = "https://server.sushen.workers.dev"
+export const BACKEND_URL = import.meta.env.VITE_URL

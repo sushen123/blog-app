@@ -45,7 +45,7 @@ export const SignupBox = () => {
                     password: e.target.value
                 })
         }}/>
-        <Button href={"/signin"} type={"Sign Up"} otype={"Sign In"} text={"Already have an account?"} onClick={async() => {
+        <Button href={"/"} type={"Sign Up"} otype={"Sign In"} text={"Already have an account?"} onClick={async() => {
             try {
                 const response = await axios.post(`${BACKEND_URL}/api/v1/user/signup`, inputs)
                 const token = await response.data.token;
@@ -53,7 +53,11 @@ export const SignupBox = () => {
                 navigate("/blog")
             }
             catch(error) {
-                setError(error.response.data.message)
+                if (axios.isAxiosError(error)) {
+                    setError(error.response?.data.message || "An error occurred");
+                } else {
+                    setError("An error occurred");
+                }
               
             }
         }}/>

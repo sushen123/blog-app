@@ -5,14 +5,26 @@ import axios from "axios"
 import { BACKEND_URL } from "../config"
 import { SearchBlog } from "./SearchBlog"
 
+interface BlogNav {
+    title: string;
+    content: string;
+    date: string;
+    id: number;
+    name: string;
+    published: boolean
+}
 
-export const Navbar = ({name}) => {
+interface NavbarProps {
+    name: string
+}
+
+export const Navbar: React.FC<NavbarProps> = ({name}) => {
     const [profileOptions, setProfileOptions ] = useState(false)
     const navigate = useNavigate()
-    const profileRef = useRef(null);
-    const [object, setObject] = useState("")
-    const [blogs, setBlogs] = useState([])
-    const searchRef = useRef(null)
+    const profileRef = useRef<HTMLButtonElement>(null); 
+  const [object, setObject] = useState<string>(""); 
+  const [blogs, setBlogs] = useState<BlogNav[]>([]); 
+  const searchRef = useRef<HTMLDivElement>(null); 
     const ignoredKeyWords = ["the", "a", "in", "are", "an", " " , "", "is", "that", "this"]
    
     function useDebounce(value:string, delay: number) {
@@ -66,8 +78,8 @@ export const Navbar = ({name}) => {
     },[debounceObject])
 
     useEffect(() => {
-        function handleClickOutside(event) {
-            if(searchRef.current && !searchRef.current.contains(event.target)){
+        function handleClickOutside(event:MouseEvent) {
+            if(searchRef.current && !searchRef.current.contains(event.target as Node)){
                 setBlogs([])
             }
         }
@@ -105,11 +117,7 @@ export const Navbar = ({name}) => {
                 </svg>
             <h1 className="pl-2 text-slate-500 ">Write</h1>
             </button>
-            <div> 
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
-                </svg>
-                </div>
+           
 
         <button onClick={handleProfileClick} className="flex m-2 ml-1 sm:mx-5 items-center w-8 h-8 justify-center  rounded-full bg-cyan-400" ref={profileRef}>
            {name[0]}
@@ -159,8 +167,14 @@ const ProfileClick = () => {
 </div>
 }
 
+import { Blog } from "./SearchBlog"
 
-const Search = ({blogs, debounceObject}) => {
+interface SearchProps  {
+    blogs: Blog[],
+    debounceObject: string
+}
+
+const Search: React.FC<SearchProps> = ({blogs, debounceObject}) => {
 
 
     return <div>

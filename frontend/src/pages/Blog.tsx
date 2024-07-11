@@ -6,14 +6,25 @@ import { formateDate } from "../component/FormattedDate"
 import { BACKEND_URL } from "../config"
 
 
+interface Blog {
+    id: number,
+    name: string,
+    title: string,
+    content: string,
+    createdAt: string,
+    author: {name: string}
+
+}
+
+
 
 export const Blog = () => {
-    const [blogs, setBlogs] = useState([]);
-    const [page, setPage] = useState(1)
-    const [hasMore, setHasMore] = useState(true)
-    const [loading, setLoading] = useState(false)
-    const [err, setErr] = useState(null)
-    const [name, setName] = useState("")
+    const [blogs, setBlogs] = useState<Blog[]>([]);
+    const [page, setPage] = useState<number>(1);
+    const [hasMore, setHasMore] = useState<boolean>(true);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [err, setErr] = useState<{ message: string }  | null>(null); 
+    const [name, setName] = useState<string>("");
 
 
     const fethBlogs = useCallback(async () => {
@@ -37,7 +48,11 @@ export const Blog = () => {
             setPage((prevPage) => prevPage + 1)
         }
         catch(error) {
-            setErr(error)
+            if (axios.isAxiosError(error)) {
+                setErr({ message: error.response?.data.message || "An error occurred" });
+            } else {
+                setErr({ message: "An error occurred" });
+            }
         }
         finally {
             setLoading(false)
@@ -81,9 +96,10 @@ export const Blog = () => {
 
 
 
+
     return <div className=" h-screen  ">
         <Navbar name={name} />
-        {blogs.map((blog) => (
+        {blogs.map((blog:Blog) => (
                 <BlogCard key={blog.id} title={blog.title} content={blog.content} date={formateDate(blog.createdAt)}  id={blog.id}  name={blog.author.name} />
             ))}
             {loading && 

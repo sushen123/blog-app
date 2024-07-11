@@ -5,10 +5,20 @@ import axios from "axios"
 import { BACKEND_URL } from "../config"
 import { formateDate } from "../component/FormattedDate"
 
+
+interface Blog {
+    id: number,
+    title: string,
+    content: string,
+    createdAt: string,
+    published: boolean
+
+}
+
 export const Profile = () => {
     const [draft, setDraft] = useState(true)
     const [name, setName] = useState("")
-    const [loading, setLoading] = useState(false)
+
     const [blogs, setBlogs] = useState([])
     const [pub, setPub] = useState(false)
     const [pubBlog, setPubBlog] = useState([])
@@ -16,7 +26,7 @@ export const Profile = () => {
    
 
     const nameFn = useCallback(async() => {
-        setLoading(true)
+      
         const response = await axios.get(`${BACKEND_URL}/api/v1/user/name`, {
             headers: {
                 "Authorization": localStorage.getItem("token")
@@ -39,11 +49,11 @@ export const Profile = () => {
     useEffect(() => {
         nameFn()
         getBlogs()
-        setLoading(false)
+      
     },[])
   
 
-    async function  published(userId) {
+    async function  published(userId: number) {
        
         const response = await axios.put(`${BACKEND_URL}/api/v1/blog/updatePublish`, {
            id: userId
@@ -60,7 +70,7 @@ export const Profile = () => {
     async function userPublished() {
        
         try {
-            setLoading(true)
+          
             const response = await axios.get(`${BACKEND_URL}/api/v1/blog/userPublished`, {
                 headers: {
                     "Authorization": localStorage.getItem("token")
@@ -70,9 +80,7 @@ export const Profile = () => {
             console.log(response.data.blog)
         } catch (error) {
             console.error("Error fetching published blogs:", error)
-        } finally {
-            setLoading(false)
-        }
+        } 
     }
 
     return <div >
@@ -100,10 +108,10 @@ export const Profile = () => {
         </div>
         <hr />
         <div>
-         {draft &&  blogs.map((blog) => (
+         {draft &&  blogs.map((blog:Blog) => (
         <BlogCardProfile key={blog.id} id={blog.id} title={blog.title} content={blog.content} date={formateDate(blog.createdAt) } publishedAt={() => published(blog.id) } pubBool={blog.published} type={"draft"} />
          )) }
-          {pub && pubBlog.map((blog) => (
+          {pub && pubBlog.map((blog:Blog) => (
         <BlogCardProfile key={blog.id} id={blog.id} title={blog.title} content={blog.content} date={formateDate(blog.createdAt) } publishedAt={() => published(blog.id)} pubBool={blog.published} type={"publish"} />
          )) }
         

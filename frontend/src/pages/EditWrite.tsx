@@ -1,5 +1,5 @@
 import { useLocation, useNavigate,  } from "react-router-dom";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
 
@@ -28,10 +28,10 @@ export const Edit = () => {
     }
 
     const [rows, setRows] = useState(1);
-    const textareaRef = useRef(null);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
 
 
-    const handleChange = (event) => {
+    const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         const textareaLineHeight = 24; 
         const previousRows = event.target.rows;
         event.target.rows = 1; 
@@ -131,10 +131,13 @@ export const Edit = () => {
        }
 
        useEffect(() => {
-
-        setTimeout(() => {
-            setAlert("")
-        },2000)
+        const timeoutId = setTimeout(() => {
+            setAlert("");
+        }, 2000);
+    
+        return () => {
+            clearTimeout(timeoutId);
+        };
 
        },[alerts])
        

@@ -1,8 +1,23 @@
 import { useNavigate } from "react-router-dom"
 
+ export interface Blog {
+    title: string;
+    content: string;
+    date: string;
+    id: number;
+    name: string;
+    published: boolean
+  }
+  
+
+ 
+  interface BlogCardProps {
+    blog: Blog
+   object: string
+  }
  
 
- export const SearchBlog = ({blog, object}) => {
+ export const SearchBlog: React.FC<BlogCardProps> = ({blog, object}) => {
     const navigate = useNavigate()
     const {id, title, content, published, name} = blog
 
@@ -20,11 +35,13 @@ import { useNavigate } from "react-router-dom"
  }
 
 
- const highlightText = (text, searchTerm) => {
+ 
+
+ const highlightText = (text:string, searchTerm:string) => {
     if(!searchTerm) return text;
     const parts = text.split(new RegExp(`(${searchTerm})`, 'gi'));
 
-    return parts.map((part, index) => 
+    return parts.map((part:string, index:number) => 
         part.toLowerCase() === searchTerm.toLowerCase() ? (
             <span key={index} className="bg-yellow-400 font-semibold">
                 {part}

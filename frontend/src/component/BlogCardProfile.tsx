@@ -1,6 +1,16 @@
 import { useNavigate } from "react-router-dom"
 
-export const BlogCardProfile = ({title, content, id, date, publishedAt, pubBool, type}) => {
+interface BlogProfileProps {
+    title: string,
+    content: string,
+    id: number,
+    date: string,
+    publishedAt: (id:number) => void,
+    pubBool: boolean,
+    type: string
+}
+
+export const BlogCardProfile: React.FC<BlogProfileProps> = ({title, content, id, date, publishedAt, pubBool, type}) => {
     
     const navigate = useNavigate()
     
