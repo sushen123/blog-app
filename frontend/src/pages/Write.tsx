@@ -8,6 +8,7 @@ import * as parsers from 'prettier/parser-markdown';
 
 
 export const Write = () => {
+    
     const [profileOptions, setProfileOptions ] = useState(false)
     const navigate = useNavigate()
     const profileRef = useRef(null);
@@ -168,7 +169,7 @@ export const Write = () => {
        }
 
        useEffect(() => {
-        
+
        })
 
 
